@@ -72,7 +72,14 @@ class UI {
         `;
 
         const resultado = document.querySelector('#resultado');
-        resultado.appendChild(divResult);
+        const spinner = document.querySelector('#cargando');
+        spinner.style.display = 'block'
+
+
+        setTimeout(() => {
+            spinner.style.display = 'none';
+            resultado.appendChild(divResult);
+        }, 3000);
     }
 
 }
@@ -107,6 +114,10 @@ class Seguro {
             default:
                 break;
         }
+
+        const diferencia = new Date().getFullYear - this.year;
+
+        cantidad -= ((diferencia * 3) * cantidad) / 100;
 
         if (this.tipo === 'basico') {
             cantidad *= 1.30;
@@ -144,11 +155,17 @@ function cotizarSeguroSubmit(e) {
     if (marca === '' || year === '' || tipo === '') {
         ui.mostrarError('Completa todos los campos', 'error');
         return;
-    } else {
-        const seguro = new Seguro(marca, year, tipo,);
-        const total = seguro.calcularSeguro();
-
-        ui.mostrarResultado(seguro, total);
     }
+
+    const resultados = document.querySelector('#resultado div');
+    if (resultados !== null) {
+        resultados.remove();
+    }
+
+    const seguro = new Seguro(marca, year, tipo,);
+    const total = seguro.calcularSeguro();
+
+    ui.mostrarResultado(seguro, total);
+
 
 }
